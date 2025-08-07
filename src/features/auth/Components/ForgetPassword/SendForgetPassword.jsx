@@ -29,7 +29,7 @@ export default function SendForgetPassword() {
         <CardWrapper className=" md:w-2xl shadow-amber-50/25 shadow">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <div>
-              <img src={img.logo} alt="" className="w-40" />
+              <img src={img.logo2} alt="" className="w-40" />
             </div>
             <CardTitle className="text-3xl capitalize text-white font-semibold text-center">
               Forget your paassword
