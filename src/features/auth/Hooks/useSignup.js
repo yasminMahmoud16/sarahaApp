@@ -34,21 +34,11 @@ export default function useSignup() {
 
 
 
-    //signup google 
-    const login = useGoogleLogin({
-        onSuccess: (tokenResponse) => {
-            console.log(tokenResponse);
-            // you can decode the JWT if needed
-        },
-        onError: () => {
-            console.log('Login Failed');
-        },
-    });
+
     return {
         register,
         handleSubmit,
         control,
         errors,
-        login
     }
 }

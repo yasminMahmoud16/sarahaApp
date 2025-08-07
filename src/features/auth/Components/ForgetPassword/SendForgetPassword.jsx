@@ -34,7 +34,7 @@ export default function SendForgetPassword() {
             <CardTitle className="text-3xl capitalize text-white font-semibold text-center">
               Forget your paassword
             </CardTitle>
-            <CardDescription className="text-sm capitalize text-gray-200 ">
+            <CardDescription className="text-center text-sm capitalize text-gray-200 ">
               pleasw enter your email to change your password
             </CardDescription>
           </CardHeader>
@@ -50,14 +50,14 @@ export default function SendForgetPassword() {
 
             <div className="">
               <Button
-                className="cursor-pointer p-5 bg-white text-purple-950"
+                className="cursor-pointer p-5 bg-white text-mint-green-text  hover:bg-mint-green hover:text-white"
                 onClick={() => {
-                  sendForgetPassword(email)
+                  sendForgetPassword(email);
                 }}
               >
                 <Link
                   href=""
-                  className="transition-all  hover:text-pink-700 capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10 "
+                  className="transition-all    capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10 "
                 >
                   forget password
                 </Link>
@@ -67,7 +67,11 @@ export default function SendForgetPassword() {
             {/* {data?.message ? (
               <p className="text-green-600 text-sm mt-2">✅ {data.message}</p>
             ) : null} */}
-            {errMsg ? <p className="text-red-500 text-sm">{errMsg}</p> : null}
+            {errMsg ? (
+              <p className=" text-red-950 text-sm font-semibold capitalize">
+                {errMsg}
+              </p>
+            ) : null}
             {succMsg ? (
               <p className="text-green-600 text-sm mt-2">✅ {succMsg}</p>
             ) : null}

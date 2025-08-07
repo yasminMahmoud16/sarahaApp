@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button"
-import {Card,CardContent,CardDescription,CardFooter,CardHeader,CardTitle,} from "@/components/ui/card"
-import {Select,SelectContent,SelectGroup,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, } from "@/components/ui/card"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Controller } from "react-hook-form";
@@ -10,9 +10,9 @@ import { signup } from "../../Redux/slices/auth.js";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useSignup from "../../Hooks/useSignup.js";
-import * as icon from "@/assets/Icons/icons.js"
 import axios from "axios"
 import { GoogleLogin } from "@react-oauth/google"
+import * as icon from "@/assets/Icons/icons.js"
 
 
 
@@ -20,7 +20,7 @@ import { GoogleLogin } from "@react-oauth/google"
 export default function RightSec() {
 
     const { isError, data, isLoading } = useSelector((state) => state.signup);
-    const { register, handleSubmit, control, errors, login } = useSignup();
+    const { register, handleSubmit, control, errors } = useSignup();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -54,14 +54,6 @@ export default function RightSec() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {/* <Button
-                        onClick={() => login()}
-                        variant="outline"
-                        className="w-full flex items-center gap-2 justify-center mb-3 bg-[#d6201d] hover:bg-red-700 border-0 cursor-pointer"
-                    >
-                        <icon.FaGoogle className="text-white" />
-                        <span className="text-white capitalize">signup with Google</span>
-                    </Button> */}
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-6">
                   <div className="grid gap-2">
@@ -78,7 +70,11 @@ export default function RightSec() {
                       className="capitalize border-soft-gray placeholder:text-gray-200 "
                       {...register("fullName", { required: true })}
                     />
-                    {errors.fullName && <p>{errors.fullName.message}</p>}
+                    {errors.fullName && (
+                      <p className=" text-red-950 text-sm font-semibold capitalize">
+                        {errors.fullName.message}
+                      </p>
+                    )}
                     <Label htmlFor="email" className="capitalize text-gray-200">
                       Email
                     </Label>
@@ -89,7 +85,11 @@ export default function RightSec() {
                       placeholder="m@example.com"
                       {...register("email", { required: true })}
                     />
-                    {errors.email && <p>{errors.email.message}</p>}
+                    {errors.email && (
+                      <p className=" text-red-950 text-sm font-semibold capitalize">
+                        {errors.email.message}
+                      </p>
+                    )}
                     <Label
                       htmlFor="password"
                       className="capitalize text-gray-200"
@@ -103,7 +103,11 @@ export default function RightSec() {
                       placeholder="*************"
                       {...register("password", { required: true })}
                     />
-                    {errors.password && <p>{errors.password.message}</p>}
+                    {errors.password && (
+                      <p className=" text-red-950 text-sm font-semibold capitalize">
+                        {errors.password.message}
+                      </p>
+                    )}
                   </div>
                   <div className="grid gap-2">
                     <Label
@@ -120,7 +124,9 @@ export default function RightSec() {
                       {...register("confirmPassword", { required: true })}
                     />
                     {errors.confirmPassword && (
-                      <p>{errors.confirmPassword.message}</p>
+                      <p className=" text-red-950 text-sm font-semibold capitalize">
+                        {errors.confirmPassword.message}
+                      </p>
                     )}
                     <Label htmlFor="phone" className="capitalize text-gray-200">
                       phone
@@ -132,7 +138,11 @@ export default function RightSec() {
                       placeholder="(02|+2) 123 456 789"
                       {...register("phone", { required: true })}
                     />
-                    {errors.phone && <p>{errors.phone.message}</p>}
+                    {errors.phone && (
+                      <p className=" text-red-950 text-sm font-semibold capitalize">
+                        {errors.phone.message}
+                      </p>
+                    )}
 
                     <Controller
                       control={control}
@@ -142,7 +152,7 @@ export default function RightSec() {
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <SelectTrigger className="w-[180px] bg-[#ffffffe1] mb-4">
+                          <SelectTrigger className="w-[180px] bg-[#ffffffe1] mb-1">
                             <SelectValue placeholder="Select Your Gender" />
                           </SelectTrigger>
                           <SelectContent>
@@ -155,7 +165,7 @@ export default function RightSec() {
                       )}
                     />
                     {errors.gender && (
-                      <p className="text-red-500 text-sm">
+                      <p className=" text-red-950 text-sm font-semibold capitalize mb-2">
                         {errors.gender.message}
                       </p>
                     )}
@@ -163,18 +173,18 @@ export default function RightSec() {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full rounded-4xl  bg-[#ffff] text-purple-950 hover:bg-[#ffffff8b] hover:border  cursor-pointer hover:text-white text-md"
+                  className="w-full rounded-4xl  bg-[#ffff] text-mint-green-text hover:text-white hover:bg-mint-green  hover:border-mint-green  cursor-pointer  text-md"
                 >
                   {isLoading ? "Submitting..." : "Sign Up"}
                 </Button>
               </form>
 
-              <div className="my-2">
+              <div className=" flex items-center justify-center mt-4  w-60 md:max-w-md lg:max-w-lg mx-auto">
                 <GoogleLogin
-                                size="medium"
-                                width={'390px'}
-                                shape="circle"
+                  shape="pill"
+                  type="icon"
                   text="signup_with"
+                  width={"100%"}
                   onSuccess={async (credentialResponse) => {
                     const idToken = credentialResponse.credential;
 
@@ -185,11 +195,9 @@ export default function RightSec() {
                           idToken: idToken,
                         }
                       );
-
                       navigate("/");
                     } catch (error) {
                       if (error.response?.status === 409) {
-                        // user already exists -> fallback to login
                         try {
                           await axios.post(
                             "http://localhost:3000/auth/login/gmail",
@@ -197,7 +205,6 @@ export default function RightSec() {
                               idToken: idToken,
                             }
                           );
-
                           navigate("/signin");
                         } catch (loginError) {
                           console.error("Login failed:", loginError);
@@ -207,16 +214,17 @@ export default function RightSec() {
                       }
                     }
                   }}
-                  onError={() => {
-                    console.log("Login Failed");
-                  }}
+                  onError={() => console.log("Login Failed")}
                 />
               </div>
+
               {data?.message ? (
                 <p className="text-green-600 text-sm mt-2">✅ {data.message}</p>
               ) : null}
               {isError ? (
-                <p className="text-red-500 text-sm">{isError}</p>
+                <p className=" text-red-950 text-sm font-semibold capitalize">
+                  {isError}
+                </p>
               ) : null}
             </CardContent>
             <CardFooter className="flex-col gap-2"></CardFooter>

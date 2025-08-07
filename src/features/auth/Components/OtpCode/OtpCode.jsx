@@ -36,7 +36,7 @@ export default function OtpCode() {
         <CardWrapper className=" md:w-2xl shadow-amber-50/25 shadow">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <div>
-              <img src={img.logo} alt="" className="w-40" />
+              <img src={img.logo2} alt="" className="w-40" />
             </div>
             <CardTitle className="text-3xl capitalize text-white font-semibold text-center">
               confirm your email
@@ -96,11 +96,11 @@ export default function OtpCode() {
               </InputOTP>
             </div>
             <div className="">
-              <Button className="cursor-pointer p-5 bg-white text-purple-950">
+              <Button className="cursor-pointer p-5 bg-white text-mint-green-text hover:bg-mint-green hover:text-white">
                 <Link
                   to={""}
                   onClick={() => dispatch(confirmEmail({ email, otp }))}
-                  className="transition-all  hover:text-pink-700 capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10"
+                  className="transition-all  capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10"
                 >
                   confirm email
                 </Link>
@@ -110,7 +110,7 @@ export default function OtpCode() {
             <div className="">
               <Link
                 to={"/resend-otp"}
-                className="transition-all underline text-white hover:text-pink-700 capitalize font-medium text-lg flex items-center justify-center gap-1"
+                className="transition-all underline text-white hover:text-mint-green capitalize font-medium text-md flex items-center justify-center gap-1"
               >
                 resend otp
                 <icon.IoMdRefresh className="text-lg" />
@@ -119,7 +119,11 @@ export default function OtpCode() {
             {data?.message ? (
               <p className="text-green-600 text-sm mt-2">✅ {data.message}</p>
             ) : null}
-            {isError ? <p className="text-red-500 text-sm">{isError}</p> : null}
+            {isError ? (
+              <p className=" text-red-950 text-sm font-semibold capitalize">
+                {isError}
+              </p>
+            ) : null}
           </CardContent>
         </CardWrapper>
       </>

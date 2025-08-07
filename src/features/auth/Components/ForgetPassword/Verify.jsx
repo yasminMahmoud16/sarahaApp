@@ -28,10 +28,10 @@ export default function Verify() {
       useEffect(() => {
         if (succMsg) {
           setTimeout(() => {
-            navigate("/verify-password");
+            navigate("/reset-password");
           }, 2000);
         }
-      }, []);
+      }, [succMsg]);
     
     
     return (
@@ -39,7 +39,7 @@ export default function Verify() {
         <CardWrapper className=" md:w-2xl shadow-amber-50/25 shadow">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <div>
-              <img src={img.logo} alt="" className="w-40" />
+              <img src={img.logo2} alt="" className="w-40" />
             </div>
             <CardTitle className="text-3xl capitalize text-white font-semibold text-center">
               verify your password
@@ -49,7 +49,7 @@ export default function Verify() {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="flex flex-col items-center justify-center gap-7">
+          <CardContent className="flex flex-col items-center justify-center gap-5">
             <Input
               id="email"
               type="email"
@@ -100,14 +100,14 @@ export default function Verify() {
             </div>
             <div className="">
               <Button
-                className="cursor-pointer p-5 bg-white text-purple-950"
+                className="cursor-pointer p-5 bg-white text-mint-green-text hover:bg-mint-green hover:text-white"
                 onClick={() => {
                   verifyForgetCode({ email, otp });
                 }}
               >
                 <Link
-                  to={"/reset-password"}
-                  className="transition-all  hover:text-pink-700 capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10"
+                  to={""}
+                  className="transition-all   capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10"
                 >
                   verify password
                 </Link>
@@ -117,7 +117,7 @@ export default function Verify() {
             <div className="">
               <Link
                 to={"/resend-otp"}
-                className="transition-all underline text-white hover:text-pink-700 capitalize font-medium text-lg flex items-center justify-center gap-1"
+                className="transition-all underline text-white hover:text-mint-green capitalize font-medium text-md flex items-center justify-center gap-1"
               >
                 resend otp
                 <icon.IoMdRefresh className="text-lg" />
@@ -126,7 +126,11 @@ export default function Verify() {
             {succMsg ? (
               <p className="text-green-600 text-sm mt-2">✅ {succMsg}</p>
             ) : null}
-            {errMsg ? <p className="text-red-500 text-sm">{errMsg}</p> : null}
+            {errMsg ? (
+              <p className=" text-red-950 text-sm font-semibold capitalize">
+                {errMsg}
+              </p>
+            ) : null}
           </CardContent>
         </CardWrapper>
       </>

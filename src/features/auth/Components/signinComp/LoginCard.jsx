@@ -73,7 +73,11 @@ export default function LoginCard() {
                     placeholder="m@example.com"
                     {...register("email", { required: true })}
                   />
-                  {errors.email && <p>{errors.email.message}</p>}
+                  {errors.email && (
+                    <p className=" text-red-950 text-sm font-semibold capitalize">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="password" className="text-gray-200">
@@ -86,7 +90,11 @@ export default function LoginCard() {
                     placeholder="*************"
                     {...register("password", { required: true })}
                   />
-                  {errors.password && <p>{errors.password.message}</p>}
+                  {errors.password && (
+                    <p className=" text-red-950 text-sm font-semibold capitalize">
+                      {errors.password.message}
+                    </p>
+                  )}
 
                   <div className="flex flex-col items-center mb-2">
                     <Link
@@ -108,7 +116,7 @@ export default function LoginCard() {
               <div className="flex items-center justify-center">
                 <Button
                   type="submit"
-                  className="w-96 cursor-pointer  bg-[#6AA7B7]   hover:bg-[#558895]"
+                  className="w-60 md:w-96 cursor-pointer  bg-[#6AA7B7]   hover:bg-[#558895]"
                 >
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
@@ -118,10 +126,49 @@ export default function LoginCard() {
             {data?.message ? (
               <p className="text-green-600 text-sm mt-2">✅ {data.message}</p>
             ) : null}
-            {isError ? <p className="text-red-500 text-sm">{isError}</p> : null}
+            {isError ? (
+              <p className=" text-red-950 text-sm font-semibold capitalize">
+                {isError}
+              </p>
+            ) : null}
           </CardContent>
-          <CardFooter className="flex-col gap-2">
-            <GoogleLogin
+          <CardFooter className="flex-col gap-2 mt-0">
+            <div className=" flex items-center justify-center mt-0  w-60 md:max-w-md lg:max-w-lg mx-auto">
+              <GoogleLogin
+                shape="pill"
+                type="icon"
+                text="signup_with"
+                width={"100%"}
+                onSuccess={async (credentialResponse) => {
+                  const idToken = credentialResponse.credential;
+
+                  try {
+                    await axios.post("http://localhost:3000/auth/login/gmail", {
+                      idToken: idToken,
+                    });
+                    navigate("/");
+                  } catch (error) {
+                    if (error.response?.status === 409) {
+                      try {
+                        await axios.post(
+                          "http://localhost:3000/auth/login/gmail",
+                          {
+                            idToken: idToken,
+                          }
+                        );
+                        navigate("/signin");
+                      } catch (loginError) {
+                        console.error("Login failed:", loginError);
+                      }
+                    } else {
+                      console.error("Signup failed:", error);
+                    }
+                  }
+                }}
+                onError={() => console.log("Login Failed")}
+              />
+            </div>
+            {/* <GoogleLogin
               // theme=""
               // type=""
               size="medium"
@@ -140,7 +187,7 @@ export default function LoginCard() {
               onError={() => {
                 console.log("Login Failed");
               }}
-            />
+            /> */}
           </CardFooter>
         </CardWrapper>
       </>

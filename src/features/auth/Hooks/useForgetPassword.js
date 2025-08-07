@@ -20,7 +20,10 @@ export default function useForgetPassword() {
             setSuccMsg( res.data.message);
             return res.data
         } catch (error) {
-            const message = error.response?.data?.message || 'forget password failed.';
+            // const message = error.response?.data?.message || 'forget password failed.';
+            const message = error.response?.data?.data?.[0]?.[0]?.message
+                || error.response?.data?.message
+                || 'Forget password failed.';
             setErrMsg(message)
             return message;
         }
@@ -38,8 +41,9 @@ export default function useForgetPassword() {
 
             return res.data
         } catch (error) {
-            const message = error.response?.data?.message || 'verify forget password failed.';
-            // setErrMsg(message)
+            const message = error.response?.data?.data?.[0]?.[0]?.message
+                || error.response?.data?.message || 'verify forget password failed.';
+            setErrMsg(message)
             return message;
         }
 
@@ -58,7 +62,8 @@ export default function useForgetPassword() {
 
             return res.data
         } catch (error) {
-            const message = error.response?.data?.message || 'reset password failed.';
+            const message = error.response?.data?.data?.[0]?.[0]?.message
+                || error.response?.data?.message || 'reset password failed.';
             setErrMsg(message)
             return message;
         }
