@@ -18,12 +18,14 @@ import useLogin from "../../Hooks/useLogin..js";
 // import { login } from "../../Redux/slices/login.js";
 import { useEffect } from "react";
 import { loginData } from "../../Redux/slices/login.js";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 export default function LoginCard() {
 
-       const { isLoading, isError, data } = useSelector((state) => state.login);
+    const { isLoading, isError, data } = useSelector((state) => state.login);
 
-        const { register, handleSubmit, formState: { errors },  } = useLogin();
+        const { register, handleSubmit, formState: { errors } } = useLogin();
         const dispatch = useDispatch();
         const navigate = useNavigate();
 
@@ -45,7 +47,7 @@ export default function LoginCard() {
         <CardWrapper className="">
           <CardHeader className="flex flex-col items-center justify-center gap-4">
             <div>
-              <img src={img.logo} alt="" className="w-40" />
+              <img src={img.logo2} alt="" className="w-40" />
             </div>
             <CardTitle className="text-center text-3xl text-[#fff] font-bold">
               Login
@@ -59,7 +61,7 @@ export default function LoginCard() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-3">
                 <div className="grid gap-2">
                   <Label htmlFor="email" className="text-gray-200">
                     Email
@@ -79,23 +81,23 @@ export default function LoginCard() {
                   </Label>
                   <Input
                     id="password"
-                    className="capitalize border-soft-gray placeholder:text-gray-200"
+                    className="capitalize border-soft-gray placeholder:text-gray-200 "
                     type="password"
                     placeholder="*************"
                     {...register("password", { required: true })}
                   />
                   {errors.password && <p>{errors.password.message}</p>}
 
-                  <div className="flex flex-col items-center">
+                  <div className="flex flex-col items-center mb-2">
                     <Link
                       to={"/forget-password"}
-                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-gray-200"
                     >
-                      Forgot your password?
+                      Forgot your password ?
                     </Link>
                     <Link
                       to={"/signup"}
-                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                      className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-gray-200"
                     >
                       create account
                     </Link>
@@ -103,12 +105,14 @@ export default function LoginCard() {
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full cursor-pointer bg-pink-500 hover:bg-[#eb7fe1c2]"
-              >
-                {isLoading ? "Logging in..." : "Login"}
-              </Button>
+              <div className="flex items-center justify-center">
+                <Button
+                  type="submit"
+                  className="w-96 cursor-pointer  bg-[#6AA7B7]   hover:bg-[#558895]"
+                >
+                  {isLoading ? "Logging in..." : "Login"}
+                </Button>
+              </div>
             </form>
 
             {data?.message ? (
@@ -117,12 +121,26 @@ export default function LoginCard() {
             {isError ? <p className="text-red-500 text-sm">{isError}</p> : null}
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button
-              variant="outline"
-              className="w-full cursor-pointer bg-transparent border-2 border-pink-500 text-white hover:border-0 hover:text-purple-950"
-            >
-              Login with Google
-            </Button>
+            <GoogleLogin
+              // theme=""
+              // type=""
+              size="medium"
+              width={"380px"}
+              shape="rectangular"
+              text="signin_with"
+              onSuccess={async (credentialResponse) => {
+                const idToken = credentialResponse.credential;
+
+                await axios.post("http://localhost:3000/auth/login/gmail", {
+                  idToken: idToken,
+                });
+
+                navigate("/");
+              }}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
           </CardFooter>
         </CardWrapper>
       </>
