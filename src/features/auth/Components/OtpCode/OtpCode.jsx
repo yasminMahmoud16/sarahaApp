@@ -1,15 +1,7 @@
 import CardWrapper from '@/shared/card/CardWrapper.jsx'
-import {
-    InputOTP,
-    InputOTPGroup,
-    InputOTPSeparator,
-    InputOTPSlot,
-} from "@/components/ui/input-otp"
+import {InputOTP,InputOTPGroup,InputOTPSeparator,InputOTPSlot,} from "@/components/ui/input-otp"
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
-import { Label } from '@radix-ui/react-label'
 import { Input } from '@/components/ui/input.jsx'
-import * as img from '@/assets/Images/images.js'
-import * as icon from '@/assets/Icons/icons.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
@@ -18,6 +10,11 @@ import { Button } from '@/components/ui/button.jsx'
 import { toast } from 'sonner'
 import { Oval } from 'react-loader-spinner'
 import { OTPWithTimer } from './OTPWithTimer.jsx'
+import * as img from "@/assets/Images/images.js";
+import * as icon from "@/assets/Icons/icons.js";
+
+
+
 export default function OtpCode() {
 
 
@@ -43,27 +40,6 @@ export default function OtpCode() {
       toast.error(isError);
     }
   }, [data?.message, isError]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -160,16 +136,6 @@ export default function OtpCode() {
                 </Link>
               </Button>
             </div>
-
-            {/* <div className="">
-              <Link
-                to={"/resend-otp"}
-                className="transition-all underline text-white hover:text-mint-green capitalize font-medium text-md flex items-center justify-center gap-1"
-              >
-                resend otp
-                <icon.IoMdRefresh className="text-lg" />
-              </Link>
-            </div> */}
           </CardContent>
         </CardWrapper>
       </>

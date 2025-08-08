@@ -28,7 +28,7 @@ const initialState = {
 };
 
 // Slice
-const authSlice = createSlice({
+const signupSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {},
@@ -37,19 +37,19 @@ const authSlice = createSlice({
             .addCase(signup.pending, (state) => {
                 state.isLoading = true;
                 state.isError = null;
-                state.data = null; // Reset data on new request
+                state.data = null; 
             })
             .addCase(signup.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
-                state.isError = null; // Clear error on success
+                state.isError = null; 
             })
             .addCase(signup.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = action.payload;
-                state.data = null; // Clear data on error
+                state.data = null; 
             });
     }
 });
 
-export default authSlice.reducer;;
+export default signupSlice.reducer;;
