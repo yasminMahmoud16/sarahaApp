@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Controller } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../../Redux/slices/signup.js";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useSignup from "../../Hooks/useSignup.js";
 import { GoogleLogin } from "@react-oauth/google";
@@ -213,6 +213,13 @@ export default function RightSec() {
                 )}
               </Button>
             </form>
+            <div className="md:hidden">
+              <Link  to={"/signin"}>
+                <Button className="rounded-4xl mt-3 w-60 bg-transparent border border-white capitalize hover:bg-white hover:text-mint-green cursor-pointer text-md">
+                  sigin
+                </Button>
+              </Link>
+            </div>
 
             <div className=" flex gap-3 items-center justify-center mt-4  w-60 md:max-w-md lg:max-w-lg mx-auto">
               <GoogleLogin
