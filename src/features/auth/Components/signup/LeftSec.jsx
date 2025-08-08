@@ -9,22 +9,17 @@ export default function LeftSec() {
     return <>
         
         <div className=' w-full h-full  rounded-r-[180px] rounded-l-xl flex flex-col items-center justify-center '
-         style={{
-                        // backgroundImage: `url(${img.gradient})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                    }}
+
         >
             <div className='w-70'>
-                <img src={logo} alt="logo" className='' />
+                <img src={img.logo2} alt="logo" className='' />
             </div>
 
             <div className='flex flex-col items-center justify-center gap-4'>
-                <h1 className='text-white text-3xl font-bold capitalize'>Welcome to Saraha</h1>
+                <h1 className='text-white text-3xl font-bold capitalize'>Welcome to </h1>
                 <p className='text-white text-lg capitalize'>if you have an account sigin </p>
                     <Link to={'/signin'}>
-                <Button className='w-60 bg-transparent border border-white capitalize hover:bg-white hover:text-purple-950 cursor-pointer text-md'>
+                <Button className='w-60 bg-transparent border border-white capitalize hover:bg-white hover:text-mint-green cursor-pointer text-md'>
                     sigin
                 </Button>
                     </Link>
@@ -32,17 +27,7 @@ export default function LeftSec() {
             
         </div>
 
-        {/* <Input type="email" placeholder="Email" />
-        <GoogleLogin
-            onSuccess={credentialResponse => {
-                // const credintialDecoded = jwtDecode(credentialResponse.credential)
-                console.log(credentialResponse);
-                console.log(credentialResponse.credential);
-            }}
-            onError={() => {
-                console.log('Login Failed');
-            }}
-        />; */}
+
         
     </>
 }

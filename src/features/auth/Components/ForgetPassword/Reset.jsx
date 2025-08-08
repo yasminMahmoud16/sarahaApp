@@ -18,44 +18,64 @@ import * as img from "@/assets/Images/images.js";
 import * as icon from "@/assets/Icons/icons.js";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button.jsx";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { resendOtp } from "../../Redux/slices/resentOtp.js";
 import useForgetPassword from "../../Hooks/useForgetPassword.js";
+import { toast } from "sonner";
+import { Oval } from "react-loader-spinner";
+import { OTPWithTimer } from "../OtpCode/OTPWithTimer.jsx";
 export default function Reset() {
-    // const dispatch = useDispatch();
-    // const { isError, data } = useSelector((state) => state.resendOtp);
+    const { resetPassword, errMsg, succMsg } = useForgetPassword();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setconfirmPassword] = useState("");
-    const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState("");
+    const [showOverlay, setShowOverlay] = useState(false);
 
-    const { resetPassword } = useForgetPassword();
 
-    //   const navigate = useNavigate();
-    //   useEffect(() => {
-    //     if (data?.message) {
-    //       setTimeout(() => {
-    //         navigate("/confirm-email");
-    //       }, 2000);
-    //     }
-    //   }, [data]);
+
+  const navigate = useNavigate();
+    useEffect(() => {
+      if (succMsg) {
+        toast.success(succMsg);
+        setShowOverlay(true);
+        setTimeout(() => {
+          setShowOverlay(false);
+          navigate("/signin");
+        }, 2000);
+      } else if (errMsg) {
+        toast.error(errMsg);
+      }
+    }, [succMsg, errMsg]);
+
     return (
       <>
+        {showOverlay && (
+          <div className="fixed inset-0 bg-black/70 flex flex-col items-center justify-center z-50">
+            <Oval
+              visible={true}
+              height={80}
+              width={80}
+              color="#6AA7B7"
+              secondaryColor="#E0F4F7"
+              strokeWidth={5}
+              strokeWidthSecondary={3}
+            />
+          </div>
+        )}
         <CardWrapper className=" md:w-2xl shadow-amber-50/25 shadow">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <div>
-              <img src={img.logo} alt="" className="w-40" />
+              <img src={img.logo2} alt="" className="w-40" />
             </div>
             <CardTitle className="text-3xl capitalize text-white font-semibold text-center">
               reset password
             </CardTitle>
-            {/* <CardDescription className="text-sm capitalize text-gray-200 ">
-            the otp valid for 2 minuts
-          </CardDescription> */}
+            <CardDescription className="text-sm capitalize text-gray-200 ">
+              <OTPWithTimer/>
+          </CardDescription>
           </CardHeader>
 
-          <CardContent className="flex flex-col items-center justify-center gap-7">
+          <CardContent className="flex flex-col items-center justify-center gap-5">
             <Input
               id="email"
               type="email"
@@ -115,28 +135,26 @@ export default function Reset() {
               type="password"
               onChange={(e) => setconfirmPassword(e.target.value)}
               className="capitalize border-soft-gray placeholder:text-gray-200 md:w-96"
-              placeholder="Enter Your confirmpassword"
+              placeholder="Enter Your Confirm Password"
             />
 
             <div className="">
               <Button
-                            className="cursor-pointer p-5 bg-white text-purple-950"
-                            onClick={()=>{resetPassword({email,otp,password,confirmPassword})}}
-                //   onClick={() => dispatch(resendOtp({ email }))}
+                className="cursor-pointer p-5 bg-white text-mint-green-text hover:bg-mint-green hover:text-white"
+                onClick={() => {
+                  resetPassword({ email, otp, password, confirmPassword });
+                }}
               >
                 <Link
                   href=""
-                  className="transition-all  hover:text-pink-700 capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10 "
+                  className="transition-all   capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10 "
                 >
                   resend Otp
                 </Link>
               </Button>
             </div>
 
-            {/* {data?.message ? (
-            <p className="text-green-600 text-sm mt-2">✅ {data.message}</p>
-          ) : null}
-          {isError ? <p className="text-red-500 text-sm">{isError}</p> : null} */}
+
           </CardContent>
         </CardWrapper>
       </>

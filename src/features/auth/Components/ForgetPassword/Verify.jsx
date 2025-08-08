@@ -15,41 +15,62 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { toast } from 'sonner';
+import { Oval } from 'react-loader-spinner';
+import { OTPWithTimer } from '../OtpCode/OTPWithTimer.jsx';
 export default function Verify() {
+  const { verifyForgetCode, errMsg, succMsg } = useForgetPassword();
   const [email, setEmail] = useState("");
-    const [otp, setOtp] = useState("");
-
-    
-    const { verifyForgetCode, errMsg, succMsg } = useForgetPassword();
+  const [otp, setOtp] = useState("");
+    const [showOverlay, setShowOverlay] = useState(false);
 
 
+  const navigate = useNavigate();
+  
+    useEffect(() => {
+      if (succMsg) {
+        toast.success(succMsg);
+        setShowOverlay(true);
+        setTimeout(() => {
+          setShowOverlay(false);
+          navigate("/reset-password");
+        }, 2000);
+      } else if (errMsg) {
+        toast.error(errMsg);
+      }
+    }, [succMsg, errMsg]);
 
-      const navigate = useNavigate();
-      useEffect(() => {
-        if (succMsg) {
-          setTimeout(() => {
-            navigate("/verify-password");
-          }, 2000);
-        }
-      }, []);
     
     
     return (
       <>
+        {showOverlay && (
+          <div className="fixed inset-0 bg-black/70 flex flex-col items-center justify-center z-50">
+            <Oval
+              visible={true}
+              height={80}
+              width={80}
+              color="#6AA7B7"
+              secondaryColor="#E0F4F7"
+              strokeWidth={5}
+              strokeWidthSecondary={3}
+            />
+          </div>
+        )}
         <CardWrapper className=" md:w-2xl shadow-amber-50/25 shadow">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <div>
-              <img src={img.logo} alt="" className="w-40" />
+              <img src={img.logo2} alt="" className="w-40" />
             </div>
             <CardTitle className="text-3xl capitalize text-white font-semibold text-center">
               verify your password
             </CardTitle>
             <CardDescription className="text-sm capitalize text-gray-200 ">
-              the otp valid for 2 minuts
+              <OTPWithTimer/>
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="flex flex-col items-center justify-center gap-7">
+          <CardContent className="flex flex-col items-center justify-center gap-5">
             <Input
               id="email"
               type="email"
@@ -100,33 +121,22 @@ export default function Verify() {
             </div>
             <div className="">
               <Button
-                className="cursor-pointer p-5 bg-white text-purple-950"
+                className="cursor-pointer p-5 bg-white text-mint-green-text hover:bg-mint-green hover:text-white"
                 onClick={() => {
                   verifyForgetCode({ email, otp });
                 }}
               >
                 <Link
-                  to={"/reset-password"}
-                  className="transition-all  hover:text-pink-700 capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10"
+                  to={""}
+                  className="transition-all   capitalize font-medium text-lg flex items-center justify-center gap-1 cursor-pointer px-10"
                 >
                   verify password
                 </Link>
               </Button>
             </div>
 
-            <div className="">
-              <Link
-                to={"/resend-otp"}
-                className="transition-all underline text-white hover:text-pink-700 capitalize font-medium text-lg flex items-center justify-center gap-1"
-              >
-                resend otp
-                <icon.IoMdRefresh className="text-lg" />
-              </Link>
-            </div>
-            {succMsg ? (
-              <p className="text-green-600 text-sm mt-2">✅ {succMsg}</p>
-            ) : null}
-            {errMsg ? <p className="text-red-500 text-sm">{errMsg}</p> : null}
+          
+
           </CardContent>
         </CardWrapper>
       </>

@@ -1,11 +1,14 @@
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 import * as joi from 'joi'
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export default function useSignup() {
     const genderEnum = { male: 'male', female: 'female' };
 
+    const navigate = useNavigate();
     const signupSchema = joi.object().keys({
         fullName: joi.string().min(2).max(20).required(),
         email: joi.string().email({ minDomainSegments: 2, maxDomainSegments: 3, tlds: { allow: ['com', 'net'] } }).required(),
@@ -23,6 +26,25 @@ export default function useSignup() {
     });
 
 
+
+    const signupWithGoogle = async (idToken) => {
+        try {
+            await axios.post(
+                "http://localhost:3000/auth/signup/gmail",
+                {
+                    idToken: idToken,
+                }
+            );
+            navigate("/signin");
+        } catch (error) {
+            toast.error("Google signup failed. Please try again.");
+            console.log("signup failed:", error);
+
+        }
+    }
+
+
+
     const {
         register,
         handleSubmit,
@@ -30,25 +52,19 @@ export default function useSignup() {
         formState: { errors, isSubmitting }
     } = useForm({
         resolver: joiResolver(signupSchema)
-    })
-
-
-
-    //signup google 
-    const login = useGoogleLogin({
-        onSuccess: (tokenResponse) => {
-            console.log(tokenResponse);
-            // you can decode the JWT if needed
-        },
-        onError: () => {
-            console.log('Login Failed');
-        },
     });
+
+
+
+
+
+
+
     return {
         register,
         handleSubmit,
         control,
         errors,
-        login
+        signupWithGoogle
     }
 }

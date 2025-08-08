@@ -11,39 +11,77 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import * as img from '@/assets/Images/images.js';
+import * as icon from '@/assets/Icons/icons.js';
 import { Link, useNavigate } from "react-router-dom";
 import CardWrapper from "@/shared/card/CardWrapper.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import useLogin from "../../Hooks/useLogin..js";
 // import { login } from "../../Redux/slices/login.js";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { loginData } from "../../Redux/slices/login.js";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { toast } from "sonner";
+import { Oval } from "react-loader-spinner";
 
 export default function LoginCard() {
 
     const { isLoading, isError, data } = useSelector((state) => state.login);
 
-        const { register, handleSubmit, formState: { errors } } = useLogin();
+        const {
+          register,
+          handleSubmit,
+          formState: { errors },
+          loginGoogle,
+        } = useLogin();
         const dispatch = useDispatch();
         const navigate = useNavigate();
+  const [showOverlay, setShowOverlay] = useState(false);
 
         const onSubmit = (data) => {
           dispatch(loginData(data));
           console.log("Form submitted ✅", data);
         };
 
-        useEffect(() => {
-            if (data?.message) {
-                setTimeout(() => {
+  
     
-                    navigate("/");
-                }, 2000)
-            }
-        }, [data]);
+  useEffect(() => {
+    if (data?.message) {
+      toast.success(data.message);
+      setShowOverlay(true);
+      setTimeout(() => {
+        setShowOverlay(false);
+        navigate("/");
+      }, 2000);
+      // Optionally: dispatch(clearData());
+    } else if (isError) {
+      toast.error(isError);
+      // Optionally: dispatch(clearError());
+    }
+  }, [data?.message, isError]);
+        // useEffect(() => {
+        //     if (data?.message) {
+        //         setTimeout(() => {
+    
+        //             navigate("/");
+        //         }, 2000)
+        //     }
+        // }, [data]);
     return (
       <>
+        {showOverlay && (
+          <div className="fixed inset-0 bg-black/70 flex flex-col items-center justify-center z-50">
+            <Oval
+              visible={true}
+              height={80}
+              width={80}
+              color="#6AA7B7"
+              secondaryColor="#E0F4F7"
+              strokeWidth={5}
+              strokeWidthSecondary={3}
+            />
+          </div>
+        )}
         <CardWrapper className="">
           <CardHeader className="flex flex-col items-center justify-center gap-4">
             <div>
@@ -52,12 +90,6 @@ export default function LoginCard() {
             <CardTitle className="text-center text-3xl text-[#fff] font-bold">
               Login
             </CardTitle>
-            {/* <CardDescription>
-                    Enter your email below to login to your account
-                </CardDescription>
-                <CardAction>
-                    <Button variant="link">Sign Up</Button>
-                </CardAction> */}
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -73,7 +105,11 @@ export default function LoginCard() {
                     placeholder="m@example.com"
                     {...register("email", { required: true })}
                   />
-                  {errors.email && <p>{errors.email.message}</p>}
+                  {errors.email && (
+                    <p className=" text-red-950 text-sm font-semibold capitalize">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="password" className="text-gray-200">
@@ -86,7 +122,11 @@ export default function LoginCard() {
                     placeholder="*************"
                     {...register("password", { required: true })}
                   />
-                  {errors.password && <p>{errors.password.message}</p>}
+                  {errors.password && (
+                    <p className=" text-red-950 text-sm font-semibold capitalize">
+                      {errors.password.message}
+                    </p>
+                  )}
 
                   <div className="flex flex-col items-center mb-2">
                     <Link
@@ -108,39 +148,35 @@ export default function LoginCard() {
               <div className="flex items-center justify-center">
                 <Button
                   type="submit"
-                  className="w-96 cursor-pointer  bg-[#6AA7B7]   hover:bg-[#558895]"
+                  className="w-60 md:w-96 cursor-pointer  bg-[#6AA7B7]   hover:bg-[#558895]"
                 >
                   {isLoading ? "Logging in..." : "Login"}
                 </Button>
               </div>
             </form>
-
-            {data?.message ? (
-              <p className="text-green-600 text-sm mt-2">✅ {data.message}</p>
-            ) : null}
-            {isError ? <p className="text-red-500 text-sm">{isError}</p> : null}
           </CardContent>
-          <CardFooter className="flex-col gap-2">
-            <GoogleLogin
-              // theme=""
-              // type=""
-              size="medium"
-              width={"380px"}
-              shape="rectangular"
-              text="signin_with"
-              onSuccess={async (credentialResponse) => {
-                const idToken = credentialResponse.credential;
+          <CardFooter className="flex-col gap-2 mt-0">
+            <div className=" flex gap-2 items-center justify-center mt-0  w-60 md:max-w-md lg:max-w-lg mx-auto">
+              <GoogleLogin
+                shape="pill"
+                type="icon"
+                text="signup_with"
+                width={"100%"}
+                onSuccess={async (credentialResponse) => {
+                  const idToken = credentialResponse.credential;
+                  loginGoogle(idToken);
 
-                await axios.post("http://localhost:3000/auth/login/gmail", {
-                  idToken: idToken,
-                });
+                }}
+                onError={() => console.log("Login Failed")}
+              />
 
-                navigate("/");
-              }}
-              onError={() => {
-                console.log("Login Failed");
-              }}
-            />
+              <div className="bg-white rounded-full p-2 w-10 h-10 flex items-center justify-center cursor-pointer transition-all hover:bg-[#eff6fb]">
+                                <icon.FaFacebook className="text-blue-500 text-xl" />
+                              </div>
+                              <div className="bg-white rounded-full p-2 w-10 h-10 flex items-center justify-center cursor-pointer transition-all hover:bg-[#eff6fb]">
+                                <icon.FaXTwitter className=" text-xl" />
+                              </div>
+            </div>
           </CardFooter>
         </CardWrapper>
       </>
