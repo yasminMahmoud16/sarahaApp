@@ -1,39 +1,31 @@
 import { Button } from "@/components/ui/button"
-import {
-    Card,
-    CardAction,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+import {CardContent,CardFooter,CardHeader,CardTitle} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import * as img from '@/assets/Images/images.js';
-import * as icon from '@/assets/Icons/icons.js';
 import { Link, useNavigate } from "react-router-dom";
 import CardWrapper from "@/shared/card/CardWrapper.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import useLogin from "../../Hooks/useLogin..js";
-// import { login } from "../../Redux/slices/login.js";
 import { useEffect, useState } from "react";
 import { loginData } from "../../Redux/slices/login.js";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { toast } from "sonner";
 import { Oval } from "react-loader-spinner";
+import * as img from "@/assets/Images/images.js";
+import * as icon from "@/assets/Icons/icons.js";
+
+
+
 
 export default function LoginCard() {
 
     const { isLoading, isError, data } = useSelector((state) => state.login);
-
-        const {
-          register,
-          handleSubmit,
-          formState: { errors },
-          loginGoogle,
-        } = useLogin();
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      loginGoogle,
+    } = useLogin();
         const dispatch = useDispatch();
         const navigate = useNavigate();
   const [showOverlay, setShowOverlay] = useState(false);
@@ -45,28 +37,28 @@ export default function LoginCard() {
 
   
     
-  useEffect(() => {
-    if (data?.message) {
-      toast.success(data.message);
-      setShowOverlay(true);
-      setTimeout(() => {
-        setShowOverlay(false);
-        navigate("/");
-      }, 2000);
-      // Optionally: dispatch(clearData());
-    } else if (isError) {
-      toast.error(isError);
-      // Optionally: dispatch(clearError());
-    }
-  }, [data?.message, isError]);
-        // useEffect(() => {
-        //     if (data?.message) {
-        //         setTimeout(() => {
-    
-        //             navigate("/");
-        //         }, 2000)
-        //     }
-        // }, [data]);
+
+
+
+
+useEffect(() => {
+  if (  data?.accessToken) {
+    toast.success("logged");
+    setShowOverlay(true);
+
+    setTimeout(() => {
+      setShowOverlay(false);
+      navigate("/");
+    }, 2000);
+  }
+
+  if (isError) {
+    toast.error(isError);
+  }
+}, [ data?.accessToken, isError, navigate]);
+
+
+
     return (
       <>
         {showOverlay && (

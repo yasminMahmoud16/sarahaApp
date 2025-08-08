@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export default function useForgetPassword() {
 
@@ -15,9 +15,9 @@ export default function useForgetPassword() {
         setErrMsg(null);
         setSuccMsg(null);
         try {
-            const res = await  axios.patch(forgetPasswordApi,{email});
+            const res = await axios.patch(forgetPasswordApi, { email });
             console.log(res.data);
-            setSuccMsg( res.data.message);
+            setSuccMsg(res.data.message);
             return res.data
         } catch (error) {
             // const message = error.response?.data?.message || 'forget password failed.';
@@ -50,7 +50,7 @@ export default function useForgetPassword() {
 
 
 
-        
+
     }
     const resetPassword = async (userData) => {
         setErrMsg(null);
@@ -71,7 +71,7 @@ export default function useForgetPassword() {
 
 
 
-        
+
     }
     return {
         errMsg,
@@ -79,5 +79,5 @@ export default function useForgetPassword() {
         sendForgetPassword,
         verifyForgetCode,
         resetPassword
-  }
+    }
 }

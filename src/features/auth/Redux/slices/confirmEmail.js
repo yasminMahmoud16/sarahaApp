@@ -23,7 +23,7 @@ export const confirmEmail = createAsyncThunk(
 const initialState = {
     // isLoading: false,
     isError: null,
-    data: null, // assuming one user object
+    data: null,
 };
 
 // Slice
@@ -36,17 +36,17 @@ const confirmEmailSlice = createSlice({
             .addCase(confirmEmail.pending, (state) => {
                 // state.isLoading = true;
                 state.isError = null;
-                state.data = null; // Reset data on new request
+                state.data = null; 
             })
             .addCase(confirmEmail.fulfilled, (state, action) => {
                 // state.isLoading = false;
                 state.data = action.payload;
-                state.isError = null; // Clear error on success
+                state.isError = null; 
             })
             .addCase(confirmEmail.rejected, (state, action) => {
                 // state.isLoading = false;
                 state.isError = action.payload;
-                state.data = null; // Clear data on error
+                state.data = null; 
             });
     }
 });

@@ -1,20 +1,6 @@
 import CardWrapper from "@/shared/card/CardWrapper.jsx";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card.jsx";
-import { Label } from "@radix-ui/react-label";
+import {CardContent,CardDescription,CardHeader,CardTitle,} from "@/components/ui/card.jsx";
 import { Input } from "@/components/ui/input.jsx";
-import * as img from "@/assets/Images/images.js";
-import * as icon from "@/assets/Icons/icons.js";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button.jsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +8,11 @@ import { useEffect, useState } from "react";
 import { resendOtp } from "../../Redux/slices/resentOtp.js";
 import { toast } from "sonner";
 import { Oval } from "react-loader-spinner";
+import * as img from "@/assets/Images/images.js";
+import * as icon from "@/assets/Icons/icons.js";
+
+
+
 export default function Resend() {
   const dispatch = useDispatch();
   const { isError, data } = useSelector((state) => state.resendOtp);

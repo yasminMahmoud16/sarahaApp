@@ -1,10 +1,9 @@
 import { joiResolver } from '@hookform/resolvers/joi';
-import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import * as joi from 'joi'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import * as joi from 'joi'
 
 export default function useLogin() {
 
@@ -44,30 +43,11 @@ export default function useLogin() {
 
         }
     }
-    // const loginGoogle = useGoogleLogin({
-    //     onSuccess: async (credentialResponse) => {
-    //         console.log(credentialResponse);
-    //         const accessToken = credentialResponse;
-    //         try {
-    //             const res = await axios.post('http://localhost:3000/auth/signup/gmail',{idToken:accessToken})
-    //             console.log('User Info:', res.data);
-    //             navigate('/');
-    //         } catch (error) {
-    //             console.log('Failed to fetch user info:', error);
-    //         }
-
-
-    //         // you can decode the JWT if needed
-    //     },
-    //     onError: () => {
-    //         console.log('Login Failed');
-    //     },
-    // });
 
 
 
 
-    
+
     return {
         register,
         handleSubmit,
