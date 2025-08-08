@@ -10,10 +10,11 @@ export const signup = createAsyncThunk(
         try {
             const res = await axios.post(signupApi, userData);
             console.log(res.data);
-            
+
             return res.data; 
         } catch (error) {
             const message = error.response?.data?.message || 'Signup failed.';
+
             return thunkAPI.rejectWithValue(message);;
         }
     }

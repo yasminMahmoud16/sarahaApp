@@ -12,6 +12,8 @@ import ResendOtp from "./features/auth/ResendOtp.jsx"
 import ForgetPassword from "./features/auth/forgetPassword.jsx"
 import VerifyPassword from "./features/auth/VerifyPassword.jsx"
 import ResetPassword from "./features/auth/ResetPassword.jsx"
+import { Toaster } from "sonner";
+
 export default function App() {
 
   const route = createHashRouter([
@@ -33,9 +35,12 @@ export default function App() {
   ]);
 
 
-  return <>
-    <Provider store={store}>
-      <RouterProvider router={route} />
-    </Provider>
-  </>
+  return (
+    <>
+      <Provider store={store}>
+        <RouterProvider router={route} />
+        <Toaster richColors />
+      </Provider>
+    </>
+  );
 }

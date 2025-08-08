@@ -18,30 +18,50 @@ import * as img from "@/assets/Images/images.js";
 import * as icon from "@/assets/Icons/icons.js";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button.jsx";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { resendOtp } from "../../Redux/slices/resentOtp.js";
 import useForgetPassword from "../../Hooks/useForgetPassword.js";
+import { toast } from "sonner";
+import { Oval } from "react-loader-spinner";
+import { OTPWithTimer } from "../OtpCode/OTPWithTimer.jsx";
 export default function Reset() {
-    // const dispatch = useDispatch();
-    // const { isError, data } = useSelector((state) => state.resendOtp);
+    const { resetPassword, errMsg, succMsg } = useForgetPassword();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setconfirmPassword] = useState("");
-    const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState("");
+    const [showOverlay, setShowOverlay] = useState(false);
 
-    const { resetPassword, errMsg, succMsg } = useForgetPassword();
 
-      const navigate = useNavigate();
-      useEffect(() => {
-        if (succMsg) {
-          setTimeout(() => {
-            navigate("/signin");
-          }, 2000);
-        }
-      }, [succMsg]);
+
+  const navigate = useNavigate();
+    useEffect(() => {
+      if (succMsg) {
+        toast.success(succMsg);
+        setShowOverlay(true);
+        setTimeout(() => {
+          setShowOverlay(false);
+          navigate("/signin");
+        }, 2000);
+      } else if (errMsg) {
+        toast.error(errMsg);
+      }
+    }, [succMsg, errMsg]);
+
     return (
       <>
+        {showOverlay && (
+          <div className="fixed inset-0 bg-black/70 flex flex-col items-center justify-center z-50">
+            <Oval
+              visible={true}
+              height={80}
+              width={80}
+              color="#6AA7B7"
+              secondaryColor="#E0F4F7"
+              strokeWidth={5}
+              strokeWidthSecondary={3}
+            />
+          </div>
+        )}
         <CardWrapper className=" md:w-2xl shadow-amber-50/25 shadow">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <div>
@@ -50,9 +70,9 @@ export default function Reset() {
             <CardTitle className="text-3xl capitalize text-white font-semibold text-center">
               reset password
             </CardTitle>
-            {/* <CardDescription className="text-sm capitalize text-gray-200 ">
-            the otp valid for 2 minuts
-          </CardDescription> */}
+            <CardDescription className="text-sm capitalize text-gray-200 ">
+              <OTPWithTimer/>
+          </CardDescription>
           </CardHeader>
 
           <CardContent className="flex flex-col items-center justify-center gap-5">
@@ -134,14 +154,7 @@ export default function Reset() {
               </Button>
             </div>
 
-            {succMsg ? (
-              <p className="text-green-600 text-sm mt-2">✅ {succMsg}</p>
-            ) : null}
-            {errMsg ? (
-              <p className=" text-red-950 text-sm font-semibold capitalize">
-                {errMsg}
-              </p>
-            ) : null}
+
           </CardContent>
         </CardWrapper>
       </>

@@ -20,22 +20,45 @@ import { Button } from "@/components/ui/button.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { resendOtp } from "../../Redux/slices/resentOtp.js";
+import { toast } from "sonner";
+import { Oval } from "react-loader-spinner";
 export default function Resend() {
   const dispatch = useDispatch();
   const { isError, data } = useSelector((state) => state.resendOtp);
   const [email, setEmail] = useState("");
 
   const navigate = useNavigate();
-    useEffect(() => {
-        if (data?.message) {
-            setTimeout(() => {
+    const [showOverlay, setShowOverlay] = useState(false);
 
-                navigate("/confirm-email");
-            }, 2000)
-        }
-    }, [data]);
+    
+  useEffect(() => {
+    if (data?.message) {
+      toast.success(data.message);
+      setShowOverlay(true);
+      setTimeout(() => {
+        setShowOverlay(false);
+        navigate("/confirm-email");
+      }, 2000);
+    } else if (isError) {
+      toast.error(isError);
+    }
+  }, [data?.message, isError]);
+
   return (
     <>
+      {showOverlay && (
+        <div className="fixed inset-0 bg-black/70 flex flex-col items-center justify-center z-50">
+          <Oval
+            visible={true}
+            height={80}
+            width={80}
+            color="#6AA7B7"
+            secondaryColor="#E0F4F7"
+            strokeWidth={5}
+            strokeWidthSecondary={3}
+          />
+        </div>
+      )}
       <CardWrapper className=" md:w-2xl shadow-amber-50/25 shadow">
         <CardHeader className="flex flex-col items-center justify-center gap-2">
           <div>
@@ -72,14 +95,7 @@ export default function Resend() {
             </Button>
           </div>
 
-          {data?.message ? (
-            <p className="text-green-600 text-sm mt-2">✅ {data.message}</p>
-          ) : null}
-          {isError ? (
-            <p className=" text-red-950 text-sm font-semibold capitalize">
-              {isError}
-            </p>
-          ) : null}
+
         </CardContent>
       </CardWrapper>
     </>

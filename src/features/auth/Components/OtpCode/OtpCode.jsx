@@ -15,6 +15,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { confirmEmail } from '../../Redux/slices/confirmEmail.js'
 import { Button } from '@/components/ui/button.jsx'
+import { toast } from 'sonner'
+import { Oval } from 'react-loader-spinner'
+import { OTPWithTimer } from './OTPWithTimer.jsx'
 export default function OtpCode() {
 
 
@@ -22,17 +25,68 @@ export default function OtpCode() {
   const { isError, data } = useSelector((state) => state.confirmEmail);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+    const [showOverlay, setShowOverlay] = useState(false);
+
   const navigate = useNavigate();
 
-      useEffect(() => {
-        if (data?.message) {
-          setTimeout(() => {
-            navigate("/signin");
-          }, 2000);
-        }
-      }, [data]);
+
+    
+  useEffect(() => {
+    if (data?.message) {
+      toast.success(data.message);
+      setShowOverlay(true);
+      setTimeout(() => {
+        setShowOverlay(false);
+        navigate("/signin");
+      }, 2000);
+    } else if (isError) {
+      toast.error(isError);
+    }
+  }, [data?.message, isError]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     return (
       <>
+        {showOverlay && (
+          <div className="fixed inset-0 bg-black/70 flex flex-col items-center justify-center z-50">
+            <Oval
+              visible={true}
+              height={80}
+              width={80}
+              color="#6AA7B7"
+              secondaryColor="#E0F4F7"
+              strokeWidth={5}
+              strokeWidthSecondary={3}
+            />
+          </div>
+        )}
         <CardWrapper className=" md:w-2xl shadow-amber-50/25 shadow">
           <CardHeader className="flex flex-col items-center justify-center gap-2">
             <div>
@@ -42,7 +96,7 @@ export default function OtpCode() {
               confirm your email
             </CardTitle>
             <CardDescription className="text-sm capitalize text-gray-200 ">
-              the otp valid for 2 minuts
+              <OTPWithTimer/>
             </CardDescription>
           </CardHeader>
 
@@ -107,7 +161,7 @@ export default function OtpCode() {
               </Button>
             </div>
 
-            <div className="">
+            {/* <div className="">
               <Link
                 to={"/resend-otp"}
                 className="transition-all underline text-white hover:text-mint-green capitalize font-medium text-md flex items-center justify-center gap-1"
@@ -115,15 +169,7 @@ export default function OtpCode() {
                 resend otp
                 <icon.IoMdRefresh className="text-lg" />
               </Link>
-            </div>
-            {data?.message ? (
-              <p className="text-green-600 text-sm mt-2">✅ {data.message}</p>
-            ) : null}
-            {isError ? (
-              <p className=" text-red-950 text-sm font-semibold capitalize">
-                {isError}
-              </p>
-            ) : null}
+            </div> */}
           </CardContent>
         </CardWrapper>
       </>

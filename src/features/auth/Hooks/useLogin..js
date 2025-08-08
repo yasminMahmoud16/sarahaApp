@@ -4,6 +4,7 @@ import axios from 'axios';
 import * as joi from 'joi'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export default function useLogin() {
 
@@ -28,34 +29,21 @@ export default function useLogin() {
 
 
     //signup google 
-    const loginGoogle = useGoogleLogin({
-        onSuccess: async (tokenResponse) => {
-            const { access_token } = tokenResponse;
+    const loginGoogle = async (idToken) => {
+        try {
+            await axios.post(
+                "http://localhost:3000/auth/login/gmail",
+                {
+                    idToken: idToken,
+                }
+            );
+            navigate("/");
+        } catch (error) {
+            toast.error("Google login failed. Please try again.");
+            console.log("login failed:", error);
 
-            try {
-                // Call Google API to get user info (id_token is inside jwt)
-                // const res = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-                //     headers: {
-                //         Authorization: `Bearer ${access_token}`,
-                //     },
-                // });
-
-                // const user = res.data;
-                // console.log('Google User Info:', user);
-
-                // Send to your backend
-                await axios.post('http://localhost:3000/auth/signup/gmail', {
-                    idToken: access_token, // rename only if your backend expects it as idToken
-                });
-
-                navigate('/');
-            } catch (error) {
-                console.error('Login failed:', error.response?.data || error.message);
-            }
-        },
-        onError: () => console.log('Login Failed'),
-        scope: 'openid email profile',
-    });
+        }
+    }
     // const loginGoogle = useGoogleLogin({
     //     onSuccess: async (credentialResponse) => {
     //         console.log(credentialResponse);
