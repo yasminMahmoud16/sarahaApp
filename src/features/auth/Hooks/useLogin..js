@@ -4,9 +4,11 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as joi from 'joi'
+import { useDispatch } from 'react-redux';
+import { loginGoogleThunk } from '../Redux/slices/login.js';
 
 export default function useLogin() {
-
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const loginSchema = joi.object().keys({
         email: joi.string().email({ minDomainSegments: 2, maxDomainSegments: 3, tlds: { allow: ['com', 'net'] } }).required(),
@@ -27,22 +29,25 @@ export default function useLogin() {
 
 
 
-    //signup google 
-    const loginGoogle = async (idToken) => {
-        try {
-            await axios.post(
-                "http://localhost:3000/auth/login/gmail",
-                {
-                    idToken: idToken,
-                }
-            );
-            navigate("/");
-        } catch (error) {
-            toast.error("Google login failed. Please try again.");
-            console.log("login failed:", error);
+    //logi google 
+    const loginGoogle = (idToken) => {
+        dispatch(loginGoogleThunk(idToken));
+    };
 
-        }
-    }
+    // const loginGoogle = async (idToken) => {
+    //     try {
+    //         await axios.post(
+    //             "http://localhost:3000/auth/login/gmail",
+    //             {
+    //                 idToken: idToken,
+    //             }
+    //         );
+    //     } catch (error) {
+    //         toast.error("Google login failed. Please try again.");
+    //         console.log("login failed:", error);
+
+    //     }
+    // }
 
 
 
