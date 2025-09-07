@@ -214,7 +214,7 @@ export default function RightSec() {
               </Button>
             </form>
             <div className="md:hidden">
-              <Link  to={"/signin"}>
+              <Link to={"/signin"}>
                 <Button className="rounded-4xl mt-3 w-60 bg-transparent border border-white capitalize hover:bg-white hover:text-mint-green cursor-pointer text-md">
                   sigin
                 </Button>
@@ -222,16 +222,38 @@ export default function RightSec() {
             </div>
 
             <div className=" flex gap-3 items-center justify-center mt-4  w-60 md:max-w-md lg:max-w-lg mx-auto">
-              <GoogleLogin
+              {/* <GoogleLogin
                 shape="pill"
                 type="icon"
                 text="signup_with"
                 width={"100%"}
                 onSuccess={async (credentialResponse) => {
                   const idToken = credentialResponse.credential;
+                  console.log(credentialResponse);
+                  
                   signupWithGoogle(idToken);
                 }}
                 onError={() => toast.error("signup Failed please try again ")}
+              /> */}
+              <GoogleLogin
+                shape="pill"
+                type="icon"
+                text="signup_with"
+                width="100%"
+                onSuccess={async (credentialResponse) => {
+                  const idToken = credentialResponse?.credential;
+                  console.log("Google response:", credentialResponse);
+
+                  // if (!idToken) {
+                  //   console.error("No idToken received from Google");
+                  //   toast.error("Google login failed. Please try again.");
+                  //   return;
+                  // }
+
+                    await signupWithGoogle(idToken);
+                  
+                }}
+                onError={() => console.log("signup Failed")}
               />
 
               <div className="bg-white rounded-full p-2 w-10 h-10 flex items-center justify-center cursor-pointer transition-all hover:bg-[#eff6fb]">

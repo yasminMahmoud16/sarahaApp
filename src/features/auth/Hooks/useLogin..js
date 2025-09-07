@@ -1,15 +1,15 @@
 import { joiResolver } from '@hookform/resolvers/joi';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import * as joi from 'joi'
-import { useDispatch } from 'react-redux';
-import { loginGoogleThunk } from '../Redux/slices/login.js';
+// import { useDispatch } from 'react-redux';
+// import { useNavigate } from 'react-router-dom';
+// import { loginGoogleThunk } from '../Redux/slices/login.js';
 
 export default function useLogin() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    // const dispatch = useDispatch();
+    // const navigate = useNavigate();
     const loginSchema = joi.object().keys({
         email: joi.string().email({ minDomainSegments: 2, maxDomainSegments: 3, tlds: { allow: ['com', 'net'] } }).required(),
         password: joi.string().pattern(new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)).required().messages({
@@ -22,32 +22,32 @@ export default function useLogin() {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting }
+        formState: { errors }
     } = useForm({
         resolver: joiResolver(loginSchema)
     })
 
 
 
-    //logi google 
-    const loginGoogle = (idToken) => {
-        dispatch(loginGoogleThunk(idToken));
-    };
+    // //logi google 
+    // const loginGoogle = (idToken) => {
+    //     dispatch(loginGoogleThunk(idToken));
+    // };
 
-    // const loginGoogle = async (idToken) => {
-    //     try {
-    //         await axios.post(
-    //             "http://localhost:3000/auth/login/gmail",
-    //             {
-    //                 idToken: idToken,
-    //             }
-    //         );
-    //     } catch (error) {
-    //         toast.error("Google login failed. Please try again.");
-    //         console.log("login failed:", error);
+    const loginGoogle = async (idToken) => {
+        try {
+            await axios.post(
+                "https://6afe133e75d9.ngrok-free.app/auth/login/gmail",
+                {
+                    idToken: idToken,
+                }
+            );
+        } catch (error) {
+            toast.error("Google login failed. Please try again.");
+            console.log("login failed:", error);
 
-    //     }
-    // }
+        }
+    }
 
 
 

@@ -156,7 +156,11 @@ useEffect(() => {
                 width={"100%"}
                 onSuccess={async (credentialResponse) => {
                   const idToken = credentialResponse.credential;
+                  console.log(credentialResponse);
+                  
                   loginGoogle(idToken);
+                  // navigate("/");
+                  // dispatch(loginGoogleThunk(idToken));
 
                 }}
                 onError={() => console.log("Login Failed")}

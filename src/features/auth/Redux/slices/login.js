@@ -12,7 +12,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const loginApi = 'http://localhost:3000/auth/login';
-const loginGoogleApi = 'http://localhost:3000/auth/login/gmail';
+// const loginGoogleApi = 'http://localhost:3000/auth/login/gmail';
 
 // Email/Password login
 export const loginData = createAsyncThunk(
@@ -38,27 +38,27 @@ export const loginData = createAsyncThunk(
 );
 
 // Google login
-export const loginGoogleThunk = createAsyncThunk(
-    'auth/loginGoogle',
-    async (idToken, thunkAPI) => {
-        try {
-            const res = await axios.post(loginGoogleApi, { idToken });
-            const login = res.data?.data;
+// export const loginGoogleThunk = createAsyncThunk(
+//     'auth/loginGoogle',
+//     async (idToken, thunkAPI) => {
+//         try {
+//             const res = await axios.post(loginGoogleApi, { idToken });
+//             const login = res.data?.data;
 
-            if (login.accessToken) {
-                localStorage.setItem("accessToken", login.accessToken);
-            }
-            if (login.refreshToken) {
-                localStorage.setItem("refreshToken", login.refreshToken);
-            }
+//             if (login.accessToken) {
+//                 localStorage.setItem("accessToken", login.accessToken);
+//             }
+//             if (login.refreshToken) {
+//                 localStorage.setItem("refreshToken", login.refreshToken);
+//             }
 
-            return login;
-        } catch (error) {
-            const message = error.response?.data?.message || 'Google login failed.';
-            return thunkAPI.rejectWithValue(message);
-        }
-    }
-);
+//             return login;
+//         } catch (error) {
+//             const message = error.response?.data?.message || 'Google login failed.';
+//             return thunkAPI.rejectWithValue(message);
+//         }
+//     }
+// );
 
 const initialState = {
     isLoading: false,
@@ -90,21 +90,21 @@ const loginSlice = createSlice({
             })
 
             // Google login
-            .addCase(loginGoogleThunk.pending, (state) => {
-                state.isLoading = true;
-                state.isError = null;
-                state.data = null;
-            })
-            .addCase(loginGoogleThunk.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.data = action.payload;
-                state.isError = null;
-            })
-            .addCase(loginGoogleThunk.rejected, (state, action) => {
-                state.isLoading = false;
-                state.isError = action.payload;
-                state.data = null;
-            });
+            // .addCase(loginGoogleThunk.pending, (state) => {
+            //     state.isLoading = true;
+            //     state.isError = null;
+            //     state.data = null;
+            // })
+            // .addCase(loginGoogleThunk.fulfilled, (state, action) => {
+            //     state.isLoading = false;
+            //     state.data = action.payload;
+            //     state.isError = null;
+            // })
+            // .addCase(loginGoogleThunk.rejected, (state, action) => {
+            //     state.isLoading = false;
+            //     state.isError = action.payload;
+            //     state.data = null;
+            // });
     }
 });
 

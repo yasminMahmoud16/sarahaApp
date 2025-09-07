@@ -27,15 +27,36 @@ export default function useSignup() {
 
 
 
+    // const signupWithGoogle = async (idToken) => {
+    //     try {
+    //         await axios.post(
+    //             "https://6afe133e75d9.ngrok-free.app/auth/signup/gmail",
+    //             {
+    //                 idToken: idToken,
+    //             }
+    //         );
+            
+    //         navigate("/signin");
+    //     } catch (error) {
+    //         toast.error("Google signup failed. Please try again.");
+    //         console.log("signup failed:", error);
+
+    //     }
+    // }
+
     const signupWithGoogle = async (idToken) => {
         try {
             await axios.post(
-                "http://localhost:3000/auth/signup/gmail",
+                "https://6afe133e75d9.ngrok-free.app/auth/signup/gmail",
                 {
-                    idToken: idToken,
+                    idToken,
                 }
+
+
             );
             navigate("/signin");
+            console.log("Sending token:", idToken);
+
         } catch (error) {
             toast.error("Google signup failed. Please try again.");
             console.log("signup failed:", error);
@@ -49,7 +70,7 @@ export default function useSignup() {
         register,
         handleSubmit,
         control,
-        formState: { errors, isSubmitting }
+        formState: { errors }
     } = useForm({
         resolver: joiResolver(signupSchema)
     });
